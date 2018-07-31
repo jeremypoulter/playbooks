@@ -1,0 +1,10 @@
+.vscode
+.vagrant
+*-console.log
+*.retry
+
+*.pyc
+
+.vault_pass*
+
+.vs

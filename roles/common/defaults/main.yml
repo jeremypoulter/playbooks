@@ -1,0 +1,29 @@
+---
+
+open_file_ulimit: 64000
+timezone: GB
+
+user_list: 
+  - "{{ ansible_user }}"
+system_users: [ ]
+default_users: [ ]
+
+users:
+  jeremy:
+    comment: "Jeremy Poulter"
+    key: authorized_keys.jeremy.pub
+    email: "jeremy@bigjungle.net"
+  ubuntu:
+    comment: "ubuntu"
+    key: authorized_keys.jeremy.pub
+    email: "ubuntu@bigjungle.net"
+  pi:
+    comment: "pi"
+    key: authorized_keys.jeremy.pub
+    email: "pi@bigjungle.net"
+
+key_dir: "{{ role_path }}/keys"
+
+common_packages:
+  - htop
+  - vim

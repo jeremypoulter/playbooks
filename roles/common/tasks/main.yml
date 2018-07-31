@@ -1,0 +1,125 @@
+---
+# This playbook performs the basic server setup
+
+- name: Set the host name
+  hostname:
+    name: "{{ inventory_hostname_short }}"
+  tags:
+    - common
+    - common-hostname
+
+- name: Set the host name in hosts file
+  lineinfile:
+    dest: /etc/hosts
+    state: present
+    backrefs: yes
+    regexp: '^127.0.0.1(( *localhost4?(\.localdomain4?)?)+)'
+    line: '127.0.0.1\1 {{ inventory_hostname_short }}'
+  tags:
+    - common
+    - common-hostname
+
+- name: Gather OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution|lower }}-{{
+              ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution|lower }}-{{
+              ansible_distribution_release }}.yml"
+        - "{{ ansible_distribution|lower }}-{{
+              ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution|lower }}.yml"
+        - "{{ ansible_os_family|lower }}.yml"
+        - defaults.yml
+  tags:
+    - common
+    - common-user-setup
+    - common-os
+
+- name: OS Specific tasks
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution|lower }}-{{
+              ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution|lower }}-{{
+              ansible_distribution_release }}.yml"
+        - "{{ ansible_distribution|lower }}-{{
+              ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution|lower }}.yml"
+        - "{{ ansible_os_family|lower }}.yml"
+  tags:
+    - common
+    - common-os
+
+- name: Adding user groups
+  group:
+    name: "{{item}}"
+    state: present
+  with_items: "{{user_list}} + {{system_users}}"
+  tags:
+    - common
+    - common-user-setup
+
+- name: Add real users
+  user:
+    name: "{{item}}"
+    comment: "{{users[item].comment}}"
+    group: "{{item}}"
+    groups: "{{sudo_group}}"
+    shell: /bin/bash
+  with_items: "{{user_list}}"
+  tags:
+    - common
+    - common-user-setup
+
+- name: Add system users
+  user:
+    name: "{{item}}"
+    group: "{{item}}"
+    create_home: no
+    system: yes
+    shell:  /usr/sbin/nologin
+  with_items: "{{system_users}}"
+  tags:
+    - common
+    - common-user-setup
+
+- name: Installing ssh key
+  authorized_key:
+    user: "{{item}}"
+    key: "{{ lookup('file', '{{key_dir}}/{{users[item].key}}') }}"
+  with_items: "{{user_list}}"
+  tags:
+    - common
+    - common-user-setup
+
+- name: Allow password less sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%{{sudo_group}}'
+    line: '%{{sudo_group}} ALL=(ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+  tags:
+    - common
+    - common-user-setup
+
+- name: Set soft ulimits
+  pam_limits:
+    domain: "*"
+    limit_type: soft
+    limit_item: nofile
+    value: "{{open_file_ulimit}}"
+
+- name: Set hard ulimits
+  pam_limits:
+    domain: "*"
+    limit_type: hard
+    limit_item: nofile
+    value: "{{open_file_ulimit}}"
+
+- name: Set timezone
+  timezone:
+    name: "{{timezone}}"

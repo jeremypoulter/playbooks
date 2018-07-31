@@ -1,0 +1,23 @@
+---
+
+- set_fact:
+    temp_ansible_connection: "{{ansible_connection}}"
+
+- name: Add {{ansible_host}} host key
+  block:
+    - command: ssh-keyscan -t rsa {{ansible_host}}
+      register: ssh_public_key
+      changed_when: false
+    - known_hosts:
+        path: ~/.ssh/known_hosts
+        name: "{{ansible_host}}"
+        key: "{{ ssh_public_key.stdout }}"
+  delegate_to: localhost
+  when: "'ssh' == temp_ansible_connection"
+
+- name: Bootstrap Ubuntu
+  raw: apt-get install -y python-minimal
+  become: yes
+  register: python_install
+  changed_when: "python_install.stdout.find('is already the newest version') == -1"
+  when: bootstrap_ubuntu is defined
