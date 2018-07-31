@@ -4,3 +4,13 @@ vpn         ansible_host=172.16.0.84
 home        ansible_host=172.16.0.54
 nodered     ansible_host=172.16.0.225
 plex        ansible_host=172.16.0.53
+
+[pi]
+home
+nodered
+
+[ubuntu]
+openhab
+bigjungle
+vpn
+plex
