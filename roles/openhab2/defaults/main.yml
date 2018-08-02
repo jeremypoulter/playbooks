@@ -1,0 +1,6 @@
+---
+
+openhab_user: openhab
+openhab_config: /etc/openhab2
+openhab_config_repo: git@github.com:jeremypoulter/openhab-config.git
+openhab_config_version: master

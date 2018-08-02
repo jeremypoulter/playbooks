@@ -1,0 +1,8 @@
+---
+
+- name: Install Java
+  apt: name={{java_deb}}
+       state=latest
+  tags:
+    - java 
+    - java-install

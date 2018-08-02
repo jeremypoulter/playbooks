@@ -1,0 +1,19 @@
+---
+
+- hosts: openhab
+  gather_facts: no
+  tasks:
+    - include_tasks: tasks/bootstrap.yml
+
+- hosts: openhab
+  become: yes
+  roles:
+    - role: common
+    - role: java
+    - role: openhab2
+
+- hosts: openhab
+  serial: 1
+  tasks:
+    - include_tasks: tasks/reboot_if_needed.yml
+  tags: reboot

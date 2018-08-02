@@ -1,0 +1,9 @@
+---
+
+java_version_major: 8
+java_version_minor: 0
+java_version: "{{java_version_major}}.{{java_version_minor}}"
+java_vendor: openjdk
+
+#java_rpm: "rh-php{{java_version_major}}{{java_version_minor}}"
+java_deb: "{{java_vendor}}-{{java_version_major}}-jre-headless"
