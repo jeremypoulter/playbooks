@@ -27,3 +27,5 @@ key_dir: "{{ role_path }}/keys"
 common_packages:
   - htop
   - vim
+  - acl
+  - git
