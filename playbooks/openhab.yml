@@ -11,6 +11,32 @@
     - role: common
     - role: java
     - role: openhab2
+    - role: samba
+      samba_log: /var/log/samba/log.%m
+      samba_server_string: OpenHAB server
+      samba_shares:
+        - name: openHAB2-userdata
+          comment: openHAB2 userdata
+          path: /var/lib/openhab2
+          browseable: "yes"
+          writable: "yes"
+          guest_ok : "no"
+          public: "no"
+          create_mode: "0777"
+          directory_mode: "0777"
+
+        - name: openHAB2-conf
+          comment: openHAB2 site configuration
+          path: /etc/openhab2
+          browseable: "yes"
+          writable: "yes"
+          guest_ok : "no"
+          public: "no"
+          create_mode: "0777"
+          directory_mode: "0777"
+      samba_users:
+        - name: openhab
+          password: openhab
 
 - hosts: openhab
   serial: 1
