@@ -5,10 +5,12 @@ home        ansible_host=172.16.0.54
 nodered     ansible_host=172.16.0.225
 plex        ansible_host=172.16.0.53
 moonshade   ansible_host=172.16.0.94
+zerocam     ansible_host=172.16.0.242
 
 [pi]
 home
 nodered
+zerocam
 
 [ubuntu]
 openhab
