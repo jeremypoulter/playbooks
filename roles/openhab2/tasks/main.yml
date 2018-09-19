@@ -26,12 +26,14 @@
     update_cache: yes
     cache_valid_time: 7200
   with_items:
-     - openhab2
+    - openhab2
 #     - openhab2-addons
 #     - openhab2-addons-legacy
 #     - sysstat
 #     - nginx
 #     - python-passlib
+    - jq
+    - curl
   tags:
      - packages
      - openhab2
