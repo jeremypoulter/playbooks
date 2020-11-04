@@ -1,0 +1,23 @@
+---
+
+# Disable sleep when lid closed
+
+- hosts: laptop_servers
+  become: yes
+  tasks:
+    - name: Disable sleep when lid is closed
+      lineinfile:
+        path: /etc/systemd/logind.conf
+        regex: "{{ item.key }}="
+        line: "{{ item.key }}={{ item.value }}"
+      with_dict:
+        HandleLidSwitch: "ignore"
+        LidSwitchIgnoreInhibited: "no"
+      notify:
+        - restart systemd-logind
+  
+  handlers:
+    - name: restart systemd-logind
+      service:
+        name: systemd-logind
+        state: restarted
