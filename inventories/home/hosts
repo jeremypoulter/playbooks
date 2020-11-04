@@ -1,20 +1,27 @@
-openhab     ansible_host=172.16.0.212
-bigjungle   ansible_host=172.16.0.68
-vpn         ansible_host=172.16.0.84
-home        ansible_host=172.16.0.54
-nodered     ansible_host=172.16.0.225
-plex        ansible_host=172.16.0.53
-moonshade   ansible_host=172.16.0.94
-zerocam     ansible_host=172.16.0.242
+openhab     ansible_host=openhab.lan
+bigjungle   ansible_host=bigjungle.lan
+vpn         ansible_host=vpn.lan
+home        ansible_host=home.lan
+nodered     ansible_host=nodered.lan
+plex        ansible_host=plex.lan
+#moonshade   ansible_host=moonshade.lan
+zerocam     ansible_host=zerocam.lan
+#pi-stick    ansible_host=pi-stick.lan
+vm          ansible_host=vm.lan
 
 [pi]
 home
 nodered
 zerocam
+#pi-stick
 
 [ubuntu]
 openhab
 bigjungle
 vpn
 plex
-moonshade
+#moonshade
+vm
+
+[laptop_servers]
+vm
