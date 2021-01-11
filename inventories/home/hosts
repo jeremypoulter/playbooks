@@ -25,3 +25,6 @@ vm
 
 [laptop_servers]
 vm
+
+[vm_servers]
+vm
