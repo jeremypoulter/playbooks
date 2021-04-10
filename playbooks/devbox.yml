@@ -25,6 +25,7 @@
         repo: "{{ item }}"
       with_items:
         - ppa:yubico/stable
+        - ppa:kicad/kicad-5.1-releases
       tags: extra
 
     - name: Install aditional packages
@@ -34,6 +35,8 @@
           - terminator
           - yubikey-manager
           - pcscd
+          - kicad
+          - kicad-libraries
         state: present
       tags: extra
 
