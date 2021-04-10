@@ -1,0 +1,53 @@
+---
+
+- hosts: desktop
+  gather_facts: no
+  tasks:
+    - include_tasks: tasks/bootstrap.yml
+
+- hosts: desktop
+  become: yes
+  roles:
+    - role: common
+    - role: ngetchell.vscode
+    - role: geerlingguy.pip
+    - role: geerlingguy.docker
+    - role: virtualbox
+      virtualbox_php_install: no
+      virtualbox_debian_release: focal
+      virtualbox_version: 6.1
+      virtualbox_extpack_version: 6.1.18
+    - role: pixelart.chrome
+  
+  tasks:
+    - name: Add PPAs
+      apt_repository:
+        repo: "{{ item }}"
+      with_items:
+        - ppa:yubico/stable
+      tags: extra
+
+    - name: Install aditional packages
+      package:
+        name:
+          - fzf
+          - terminator
+          - yubikey-manager
+          - pcscd
+        state: present
+      tags: extra
+
+    - name: Make sure required services are started
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - pcscd
+      tags: extra
+
+
+- hosts: desktop
+  serial: 1
+  tasks:
+    - include_tasks: tasks/reboot_if_needed.yml
+  tags: reboot

@@ -5,6 +5,8 @@ home        ansible_host=home.lan
 nodered     ansible_host=nodered.lan
 plex        ansible_host=plex.lan
 #moonshade   ansible_host=moonshade.lan
+#frenzy      ansible_host=frenzy.lan
+frenzy      ansible_host=localhost ansible_connection=local
 zerocam     ansible_host=zerocam.lan
 #pi-stick    ansible_host=pi-stick.lan
 vm          ansible_host=vm.lan
@@ -21,7 +23,11 @@ bigjungle
 vpn
 plex
 #moonshade
+frenzy
 vm
+
+[desktop]
+frenzy
 
 [laptop_servers]
 vm

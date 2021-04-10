@@ -10,3 +10,8 @@
 .vs
 
 .vault
+
+roles/ngetchell.vscode
+roles/geerlingguy.pip
+roles/geerlingguy.docker
+roles/pixelart.chrome

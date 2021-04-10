@@ -13,6 +13,10 @@ users:
     comment: "Jeremy Poulter"
     key: authorized_keys.jeremy.pub
     email: "jeremy@bigjungle.net"
+  jpoulter:
+    comment: "Jeremy Poulter"
+    key: authorized_keys.jeremy.pub
+    email: "jeremy@bigjungle.net"
   ubuntu:
     comment: "ubuntu"
     key: authorized_keys.jeremy.pub

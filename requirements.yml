@@ -2,3 +2,7 @@
 
 roles:
 #  - src: stefanhorning.virtualbox
+  - src: ngetchell.vscode
+  - src: geerlingguy.pip
+  - src: geerlingguy.docker
+  - src: pixelart.chrome
