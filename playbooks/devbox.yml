@@ -40,6 +40,9 @@
           - pcscd
           - kicad
           - kicad-libraries
+          - build-essential
+          - php
+          - clang
         state: present
       tags: 
         - devbox
