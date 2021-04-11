@@ -17,6 +17,7 @@
       virtualbox_debian_release: focal
       virtualbox_version: 6.1
       virtualbox_extpack_version: 6.1.18
+      virtualbox_user: "{{ ansible_user }}"
     - role: pixelart.chrome
   
   tasks:
@@ -26,7 +27,9 @@
       with_items:
         - ppa:yubico/stable
         - ppa:kicad/kicad-5.1-releases
-      tags: extra
+      tags: 
+        - devbox
+        - devbox-extra
 
     - name: Install aditional packages
       package:
@@ -38,7 +41,9 @@
           - kicad
           - kicad-libraries
         state: present
-      tags: extra
+      tags: 
+        - devbox
+        - devbox-extra
 
     - name: Make sure required services are started
       service:
@@ -46,8 +51,38 @@
         state: started
       with_items:
         - pcscd
-      tags: extra
+      tags: 
+        - devbox
+        - devbox-extra
 
+    - name: Stop sleep after login
+      lineinfile:
+        path: /etc/systemd/logind.conf
+        regex: "{{ item.key }}="
+        line: "{{ item.key }}={{ item.value }}"
+      with_dict:
+        HandleLidSwitch: "ignore"
+        HandleLidSwitchDocked: "ignore"
+      notify:
+        - restart systemd-logind
+      tags: 
+        - devbox
+        - devbox-config
+
+    - name: Enable watching of large numbers of files
+      ansible.posix.sysctl:
+        name: fs.inotify.max_user_watches
+        value: "524288"
+        reload: yes
+      tags: 
+        - devbox
+        - devbox-config
+
+  handlers:
+    - name: restart systemd-logind
+      service:
+        name: systemd-logind
+        state: restarted
 
 - hosts: desktop
   serial: 1

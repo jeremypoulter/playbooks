@@ -6,3 +6,6 @@ roles:
   - src: geerlingguy.pip
   - src: geerlingguy.docker
   - src: pixelart.chrome
+
+collections:
+  - name: ansible.posix
