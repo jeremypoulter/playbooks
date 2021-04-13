@@ -19,7 +19,13 @@
       virtualbox_extpack_version: 6.1.18
       virtualbox_user: "{{ ansible_user }}"
     - role: pixelart.chrome
-  
+    - role: geerlingguy.nodejs
+      nodejs_version: "12.x"
+      nodejs_npm_global_packages:
+        - name: jslint
+        - name: jest
+        - name: eslint
+
   tasks:
     - name: Add PPAs
       apt_repository:
@@ -34,6 +40,7 @@
     - name: Install aditional packages
       package:
         name:
+          - curl
           - fzf
           - terminator
           - yubikey-manager
@@ -43,6 +50,8 @@
           - build-essential
           - php
           - clang
+          - ssh
+          - jq
         state: present
       tags: 
         - devbox
@@ -54,6 +63,8 @@
         state: started
       with_items:
         - pcscd
+        - docker
+        - ssh
       tags: 
         - devbox
         - devbox-extra
@@ -81,10 +92,26 @@
         - devbox
         - devbox-config
 
+    - name: Install Platform IO udev rules
+      get_url:
+        url: https://raw.githubusercontent.com/platformio/platformio-core/master/scripts/99-platformio-udev.rules
+        dest: /etc/udev/rules.d/99-platformio-udev.rules
+        mode: 0644
+      notify:
+        - restart udev
+      tags: 
+        - devbox
+        - devbox-config
+
   handlers:
     - name: restart systemd-logind
       service:
         name: systemd-logind
+        state: restarted
+
+    - name: restart udev
+      service:
+        name: udev
         state: restarted
 
 - hosts: desktop
