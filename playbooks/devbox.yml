@@ -27,12 +27,25 @@
         - name: eslint
 
   tasks:
+    - name: Add repo keys
+      apt_key:
+        keyserver: "{{ item.keyserver }}"
+        id: "{{ item.id }}"
+        state: present
+      with_items:
+        - keyserver: keyserver.ubuntu.com
+          id: C99B11DEB97541F0
+      tags: 
+        - devbox
+        - devbox-extra
+
     - name: Add PPAs
       apt_repository:
         repo: "{{ item }}"
       with_items:
         - ppa:yubico/stable
         - ppa:kicad/kicad-5.1-releases
+        - deb https://cli.github.com/packages {{ ansible_distribution_release }} main
       tags: 
         - devbox
         - devbox-extra
@@ -52,6 +65,7 @@
           - clang
           - ssh
           - jq
+          - gh
         state: present
       tags: 
         - devbox
