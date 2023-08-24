@@ -12,29 +12,38 @@
     - role: ngetchell.vscode
     - role: geerlingguy.pip
     - role: geerlingguy.docker
-    - role: virtualbox
-      virtualbox_php_install: no
-      virtualbox_debian_release: focal
-      virtualbox_version: 6.1
-      virtualbox_extpack_version: 6.1.18
-      virtualbox_user: "{{ ansible_user }}"
-    - role: pixelart.chrome
+    #- role: virtualbox
+    #  virtualbox_php_install: no
+    #  virtualbox_debian_release: jammy
+    #  virtualbox_version: 7.0
+    #  virtualbox_extpack_version: 7.0.10
+    #  virtualbox_user: "{{ ansible_user }}"
+    #- role: pixelart.chrome
     - role: geerlingguy.nodejs
-      nodejs_version: "12.x"
+      nodejs_version: "20.x"
       nodejs_npm_global_packages:
         - name: jslint
         - name: jest
         - name: eslint
 
   tasks:
-    - name: Add repo keys
-      apt_key:
-        keyserver: "{{ item.keyserver }}"
-        id: "{{ item.id }}"
-        state: present
+    #- name: Add repo keys
+    #  apt_key:
+    #    url: "{{ item }}"
+    #    state: present
+    #  with_items:
+    #    - https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    #  tags: 
+    #    - devbox
+    #    - devbox-extra
+
+    - name: Download repo keys
+      ansible.builtin.get_url:
+        url: "{{ item }}"
+        dest: /usr/share/keyrings/{{ item | basename }}
+        mode: go+r
       with_items:
-        - keyserver: keyserver.ubuntu.com
-          id: C99B11DEB97541F0
+        - https://cli.github.com/packages/githubcli-archive-keyring.gpg
       tags: 
         - devbox
         - devbox-extra
@@ -43,9 +52,9 @@
       apt_repository:
         repo: "{{ item }}"
       with_items:
-        - ppa:yubico/stable
-        - ppa:kicad/kicad-5.1-releases
-        - deb https://cli.github.com/packages {{ ansible_distribution_release }} main
+        #- ppa:yubico/stable
+        - ppa:kicad/kicad-7.0-releases
+        - deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
       tags: 
         - devbox
         - devbox-extra
@@ -66,7 +75,19 @@
           - ssh
           - jq
           - gh
+          - awscli
+          - htop
         state: present
+      tags: 
+        - devbox
+        - devbox-extra
+
+    - name: Install aditional packages (from URL)
+      apt:
+        deb: "{{ item }}"
+        state: present
+      with_items:
+          - https://releases.hyper.is/download/deb
       tags: 
         - devbox
         - devbox-extra
@@ -108,7 +129,7 @@
 
     - name: Install Platform IO udev rules
       get_url:
-        url: https://raw.githubusercontent.com/platformio/platformio-core/master/scripts/99-platformio-udev.rules
+        url: https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/system/99-platformio-udev.rules
         dest: /etc/udev/rules.d/99-platformio-udev.rules
         mode: 0644
       notify:

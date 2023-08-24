@@ -57,7 +57,7 @@
   group:
     name: "{{item}}"
     state: present
-  with_items: "{{user_list}} + {{system_users}}"
+  with_items: "{{ user_list + system_users }}"
   tags:
     - common
     - common-user-setup
