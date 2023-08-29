@@ -104,6 +104,21 @@
         - devbox
         - devbox-extra
 
+    - name: Install snap packages
+      community.general.snap:
+        name:
+          - gimp
+          - inkscape
+          - krita
+          - obs-studio
+          - spotify
+          - vlc
+          - audacity
+      tags: 
+        - devbox
+        - devbox-extra
+        - devbox-snap
+
     - name: Stop sleep after login
       lineinfile:
         path: /etc/systemd/logind.conf
