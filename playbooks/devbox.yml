@@ -77,12 +77,13 @@
           - gh
           - awscli
           - htop
+          - xdotool
         state: present
       tags: 
         - devbox
         - devbox-extra
 
-    - name: Install aditional packages (from URL)
+    - name: Install additional packages (from URL)
       apt:
         deb: "{{ item }}"
         state: present
@@ -118,6 +119,21 @@
         - devbox
         - devbox-extra
         - devbox-snap
+
+    - name: Install VPN packages
+      package:
+        name:
+          - openconnect
+          - network-manager-openconnect
+          - network-manager-openconnect-gnome
+          - openvpn
+          - network-manager-openvpn
+          - network-manager-openvpn-gnome
+        state: present
+      when: install_vpn is defined and install_vpn
+      tags: 
+        - devbox
+        - devbox-vpn
 
     - name: Stop sleep after login
       lineinfile:
