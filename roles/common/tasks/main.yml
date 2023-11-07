@@ -112,6 +112,9 @@
     limit_type: soft
     limit_item: nofile
     value: "{{open_file_ulimit}}"
+  tags:
+    - common
+    - common-limits
 
 - name: Set hard ulimits
   pam_limits:
@@ -119,7 +122,23 @@
     limit_type: hard
     limit_item: nofile
     value: "{{open_file_ulimit}}"
+  tags:
+    - common
+    - common-limits
 
 - name: Set timezone
   timezone:
     name: "{{timezone}}"
+  tags:
+    - common
+    - common-timezone
+
+- name: Enable case insensitive tab completion
+  lineinfile:
+    dest: /etc/inputrc
+    state: present
+    regexp: '^#set completion-ignore-case'
+    line: 'set completion-ignore-case on'
+  tags:
+    - common
+    - common-input-case
