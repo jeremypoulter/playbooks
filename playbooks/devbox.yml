@@ -9,7 +9,7 @@
   become: yes
   roles:
     - role: common
-    - role: ngetchell.vscode
+    #- role: ngetchell.vscode
     - role: geerlingguy.pip
     - role: geerlingguy.docker
     #- role: virtualbox
@@ -48,23 +48,23 @@
         - devbox
         - devbox-extra
 
-    - name: Add PPAs
-      apt_repository:
-        repo: "{{ item }}"
-      with_items:
-        #- ppa:yubico/stable
-        - ppa:kicad/kicad-7.0-releases
-        - deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
-      tags: 
-        - devbox
-        - devbox-extra
+    #- name: Add PPAs
+    #  apt_repository:
+    #    repo: "{{ item }}"
+    #  with_items:
+    #    #- ppa:yubico/stable
+    #    - ppa:kicad/kicad-9.0-releases
+    #    #- deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+    #  tags: 
+    #    - devbox
+    #    - devbox-extra
 
     - name: Install aditional packages
       package:
         name:
           - curl
           - fzf
-          - terminator
+          #- terminator
           - yubikey-manager
           - pcscd
           - kicad
@@ -105,20 +105,20 @@
         - devbox
         - devbox-extra
 
-    - name: Install snap packages
-      community.general.snap:
-        name:
-          - gimp
-          - inkscape
-          - krita
-          - obs-studio
-          - spotify
-          - vlc
-          - audacity
-      tags: 
-        - devbox
-        - devbox-extra
-        - devbox-snap
+    #- name: Install snap packages
+    #  community.general.snap:
+    #    name:
+    #      - gimp
+    #      - inkscape
+    #      - krita
+    #      #- obs-studio
+    #      #- spotify
+    #      #- vlc
+    #      #- audacity
+    #  tags: 
+    #    - devbox
+    #    - devbox-extra
+    #    - devbox-snap
 
     - name: Install VPN packages
       package:
@@ -135,19 +135,19 @@
         - devbox
         - devbox-vpn
 
-    - name: Stop sleep after login
-      lineinfile:
-        path: /etc/systemd/logind.conf
-        regex: "{{ item.key }}="
-        line: "{{ item.key }}={{ item.value }}"
-      with_dict:
-        HandleLidSwitch: "ignore"
-        HandleLidSwitchDocked: "ignore"
-      notify:
-        - restart systemd-logind
-      tags: 
-        - devbox
-        - devbox-config
+    #- name: Stop sleep after login
+    #  lineinfile:
+    #    path: /etc/systemd/logind.conf
+    #    regex: "{{ item.key }}="
+    #    line: "{{ item.key }}={{ item.value }}"
+    #  with_dict:
+    #    HandleLidSwitch: "ignore"
+    #    HandleLidSwitchDocked: "ignore"
+    #  notify:
+    #    - restart systemd-logind
+    #  tags: 
+    #    - devbox
+    #    - devbox-config
 
     - name: Enable watching of large numbers of files
       ansible.posix.sysctl:
