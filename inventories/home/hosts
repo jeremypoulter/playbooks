@@ -10,6 +10,8 @@ frenzy      ansible_host=localhost ansible_connection=local
 zerocam     ansible_host=zerocam.lan
 #pi-stick    ansible_host=pi-stick.lan
 vm          ansible_host=vm.lan
+vm0         ansible_host=172.16.0.213 ansible_user=root
+vm1         ansible_host=172.16.0.50 ansible_user=root
 vm2         ansible_host=vm2.lan ansible_user=root
 
 [pi]
@@ -32,6 +34,8 @@ frenzy
 
 [laptop_servers]
 vm
+vm0
+vm1
 vm2
 
 [vm_servers]

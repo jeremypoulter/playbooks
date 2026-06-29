@@ -1,16 +1,20 @@
 ---
 
 - hosts: vm_servers
-  gather_facts: no
+  gather_facts: false
   tasks:
-    - include_tasks: tasks/bootstrap.yml
+    - ansible.builtin.include_tasks: tasks/bootstrap.yml
 
 - hosts: vm_servers
-  become: yes
+  become: true
   roles:
     - role: common
 
     - role: virtualbox
+      virtualbox_version: latest
+      virtualbox_extpack_version: auto
+      virtualbox_php_install: false
+      virtualbox_php_uninstall: true
 
     - role: samba
       samba_log: /var/log/samba/log.%m
@@ -19,9 +23,9 @@
         - name: ISOs
           comment: ISO and VM images
           path: /home/{{ virtualbox_user }}/isos
-          browseable: yes
-          writable: yes
-          guest_ok: no
+          browseable: true
+          writable: true
+          guest_ok: false
           create_mode: "0666"
           directory_mode: "0770"
           owner: "{{ virtualbox_user }}"
@@ -33,5 +37,5 @@
 - hosts: vm_servers
   serial: 1
   tasks:
-    - include_tasks: tasks/reboot_if_needed.yml
+    - ansible.builtin.include_tasks: tasks/reboot_if_needed.yml
   tags: reboot

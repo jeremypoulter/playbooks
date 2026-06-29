@@ -16,4 +16,7 @@ roles/geerlingguy.pip
 roles/geerlingguy.docker
 roles/pixelart.chrome
 roles/geerlingguy.nodejs
+
+.ansible
+
 .cache

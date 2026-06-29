@@ -1,23 +1,26 @@
 ---
 
-- set_fact:
-    temp_ansible_connection: "{{ansible_connection}}"
+- name: Preserve current connection plugin
+  ansible.builtin.set_fact:
+    temp_ansible_connection: "{{ ansible_connection }}"
 
 - name: Add {{ansible_host}} host key
   block:
-    - command: ssh-keyscan -t rsa {{ansible_host}}
+    - ansible.builtin.command: ssh-keyscan -t rsa {{ ansible_host }}
       register: ssh_public_key
       changed_when: false
-    - known_hosts:
+      check_mode: false
+    - ansible.builtin.known_hosts:
         path: ~/.ssh/known_hosts
-        name: "{{ansible_host}}"
+        name: "{{ ansible_host }}"
         key: "{{ ssh_public_key.stdout }}"
+      when: ssh_public_key.stdout | length > 0
   delegate_to: localhost
   when: "'ssh' == temp_ansible_connection"
 
 - name: Bootstrap Ubuntu
-  raw: apt-get install -y python-minimal
-  become: yes
+  ansible.builtin.raw: apt-get install -y python3-minimal
+  become: true
   register: python_install
   changed_when: "python_install.stdout.find('is already the newest version') == -1"
   when: bootstrap_ubuntu is defined
