@@ -1,18 +1,13 @@
-openhab     ansible_host=openhab.lan
 bigjungle   ansible_host=bigjungle.lan
-vpn         ansible_host=vpn.lan
 home        ansible_host=home.lan
-nodered     ansible_host=nodered.lan
 plex        ansible_host=plex.lan
-#moonshade   ansible_host=moonshade.lan
-#frenzy      ansible_host=frenzy.lan
+docker      ansible_host=docker.lan
 frenzy      ansible_host=localhost ansible_connection=local
 zerocam     ansible_host=zerocam.lan
 #pi-stick    ansible_host=pi-stick.lan
 vm          ansible_host=vm.lan
 vm0         ansible_host=172.16.0.213 ansible_user=root
 vm1         ansible_host=172.16.0.50 ansible_user=root
-vm2         ansible_host=vm2.lan ansible_user=root
 
 [pi]
 home
@@ -21,8 +16,8 @@ zerocam
 #pi-stick
 
 [ubuntu]
-openhab
 bigjungle
+docker
 vpn
 plex
 #moonshade
@@ -36,7 +31,6 @@ frenzy
 vm
 vm0
 vm1
-vm2
 
 [vm_servers]
 vm
