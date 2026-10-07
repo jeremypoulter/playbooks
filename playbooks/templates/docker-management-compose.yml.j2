@@ -1,0 +1,23 @@
+---
+services:
+  portainer:
+    image: portainer/portainer-ce:lts
+    container_name: portainer
+    restart: unless-stopped
+    ports:
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - {{ docker_management_data_dir }}/portainer:/data
+
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - {{ docker_management_data_dir }}/nginx-proxy-manager/data:/data
+      - {{ docker_management_data_dir }}/nginx-proxy-manager/letsencrypt:/etc/letsencrypt

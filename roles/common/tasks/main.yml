@@ -23,14 +23,14 @@
   include_vars: "{{ item }}"
   with_first_found:
     - files:
-        - "{{ ansible_distribution|lower }}-{{
-              ansible_distribution_version }}.yml"
-        - "{{ ansible_distribution|lower }}-{{
-              ansible_distribution_release }}.yml"
-        - "{{ ansible_distribution|lower }}-{{
-              ansible_distribution_major_version }}.yml"
-        - "{{ ansible_distribution|lower }}.yml"
-        - "{{ ansible_os_family|lower }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{
+              ansible_facts['distribution_version'] }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{
+              ansible_facts['distribution_release'] }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{
+              ansible_facts['distribution_major_version'] }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}.yml"
+        - "{{ ansible_facts['os_family'] | lower }}.yml"
         - defaults.yml
   tags:
     - common
@@ -41,14 +41,14 @@
   include_tasks: "{{ item }}"
   with_first_found:
     - files:
-        - "{{ ansible_distribution|lower }}-{{
-              ansible_distribution_version }}.yml"
-        - "{{ ansible_distribution|lower }}-{{
-              ansible_distribution_release }}.yml"
-        - "{{ ansible_distribution|lower }}-{{
-              ansible_distribution_major_version }}.yml"
-        - "{{ ansible_distribution|lower }}.yml"
-        - "{{ ansible_os_family|lower }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{
+              ansible_facts['distribution_version'] }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{
+              ansible_facts['distribution_release'] }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{
+              ansible_facts['distribution_major_version'] }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}.yml"
+        - "{{ ansible_facts['os_family'] | lower }}.yml"
   tags:
     - common
     - common-os
@@ -89,8 +89,9 @@
 - name: Installing ssh key
   authorized_key:
     user: "{{item}}"
-    key: "{{ lookup('file', '{{key_dir}}/{{users[item].key}}') }}"
+    key: "{{ lookup('file', key_dir ~ '/' ~ users[item].key) }}"
   with_items: "{{user_list}}"
+  become_user: "{{ item }}"
   tags:
     - common
     - common-user-setup

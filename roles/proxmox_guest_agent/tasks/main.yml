@@ -1,0 +1,30 @@
+---
+
+- name: Install the Proxmox guest agent
+  ansible.builtin.package:
+    name: "{{ proxmox_guest_agent_package }}"
+    state: present
+
+- name: Enable the Proxmox guest agent service
+  ansible.builtin.service:
+    name: "{{ proxmox_guest_agent_service }}"
+    enabled: true
+
+- name: Check for the Proxmox guest agent channel
+  ansible.builtin.stat:
+    path: "{{ proxmox_guest_agent_channel_path }}"
+  register: proxmox_guest_agent_channel
+
+- name: Start the Proxmox guest agent when its channel is available
+  ansible.builtin.service:
+    name: "{{ proxmox_guest_agent_service }}"
+    state: started
+  when: proxmox_guest_agent_channel.stat.exists
+
+- name: Report that the Proxmox guest agent channel is unavailable
+  ansible.builtin.debug:
+    msg: >-
+      The Proxmox guest agent is installed and enabled, but its guest channel
+      is missing. Enable QEMU Guest Agent in the VM options, restart the VM,
+      and rerun this playbook to start the service.
+  when: not proxmox_guest_agent_channel.stat.exists

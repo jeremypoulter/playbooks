@@ -1,0 +1,49 @@
+---
+
+- hosts: docker
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_tasks: tasks/bootstrap.yml
+
+- hosts: docker
+  become: true
+  vars:
+    ansible_become_timeout: 30
+    docker_management_dir: /opt/docker/management
+    docker_management_data_dir: /opt/docker/data
+  roles:
+    - role: common
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ ansible_user }}"
+    - role: proxmox_guest_agent
+
+  tasks:
+    - name: Create persistent data directories for management services
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop:
+        - "{{ docker_management_dir }}"
+        - "{{ docker_management_data_dir }}/portainer"
+        - "{{ docker_management_data_dir }}/nginx-proxy-manager/data"
+        - "{{ docker_management_data_dir }}/nginx-proxy-manager/letsencrypt"
+
+    - name: Configure Portainer and Nginx Proxy Manager
+      ansible.builtin.template:
+        src: templates/docker-management-compose.yml.j2
+        dest: "{{ docker_management_dir }}/compose.yml"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Start Portainer and Nginx Proxy Manager
+      community.docker.docker_compose_v2:
+        project_src: "{{ docker_management_dir }}"
+        files:
+          - compose.yml
+        state: present
+        pull: always

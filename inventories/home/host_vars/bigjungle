@@ -1,0 +1,4 @@
+---
+
+# Keep Ansible's temporary modules out of the home directory on this host.
+ansible_remote_tmp: /tmp

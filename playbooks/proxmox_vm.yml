@@ -1,0 +1,12 @@
+---
+
+- hosts: virtual_machines
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_tasks: tasks/bootstrap.yml
+
+- hosts: virtual_machines
+  become: true
+  roles:
+    - role: common
+    - role: proxmox_guest_agent
