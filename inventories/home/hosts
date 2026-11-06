@@ -1,36 +1,42 @@
-bigjungle   ansible_host=bigjungle.lan
+bigjungle   ansible_host=bigjungle.lan ansible_user=jeremy
 home        ansible_host=home.lan
-plex        ansible_host=plex.lan
-docker      ansible_host=docker.lan
+#plex        ansible_host=plex.lan
+docker      ansible_host=docker.lan ansible_user=jeremy
 frenzy      ansible_host=localhost ansible_connection=local
-zerocam     ansible_host=zerocam.lan
+#zerocam     ansible_host=zerocam.lan
 #pi-stick    ansible_host=pi-stick.lan
-vm          ansible_host=vm.lan
+#vm          ansible_host=vm.lan
 vm0         ansible_host=172.16.0.213 ansible_user=root
 vm1         ansible_host=172.16.0.50 ansible_user=root
 
 [pi]
 home
-nodered
-zerocam
+#nodered
+#zerocam
 #pi-stick
 
 [ubuntu]
 bigjungle
 docker
-vpn
-plex
+#vpn
+#plex
 #moonshade
 frenzy
-vm
+#vm
+
+[virtual_machines]
+bigjungle
+docker
+#homeassistant
+#nas
 
 [desktop]
 frenzy
 
 [laptop_servers]
-vm
+#vm
 vm0
 vm1
 
-[vm_servers]
-vm
+#[vm_servers]
+#vm

@@ -36,6 +36,7 @@
     - common
     - common-user-setup
     - common-os
+    - common-update
 
 - name: OS Specific tasks
   include_tasks: "{{ item }}"
@@ -52,6 +53,7 @@
   tags:
     - common
     - common-os
+    - common-upgrade
 
 - name: Adding user groups
   group:
